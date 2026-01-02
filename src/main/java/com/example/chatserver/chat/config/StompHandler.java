@@ -4,7 +4,6 @@ package com.example.chatserver.chat.config;
 import com.example.chatserver.common.auth.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -18,9 +17,6 @@ import org.springframework.stereotype.Component;
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Value("${jwt.secretKey}")
-    String secretKey;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {

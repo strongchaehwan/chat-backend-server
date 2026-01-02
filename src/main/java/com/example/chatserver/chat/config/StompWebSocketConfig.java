@@ -37,6 +37,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     // 웹소켓요청(connect,subscribe,disconnect)등의 요청시에는 http header등 http 메서지를 넣어올수있고, 이를 interceptor를 통해 가로채 토큰등을 검증할수있음.
+    // jwt 토큰 검증을 통해 인증된 사용자만 채팅을 할수있게해야함
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(stompHandler);
