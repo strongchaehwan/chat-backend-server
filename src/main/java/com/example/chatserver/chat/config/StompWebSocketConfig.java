@@ -1,17 +1,22 @@
 package com.example.chatserver.chat.config;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSocketMessageBroker // 브로커가 중간에서 메시지를 받아서 특정 토픽 , 특정 룸에다가 메시지를 발행해준다
 @Slf4j
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final StompHandler stompHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -29,5 +34,11 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         // " /topic/1 " 형태로 메세지를 수신(subcribe)해야 함을 설정
         registry.enableSimpleBroker("/topic");
+    }
+
+    // 웹소켓요청(connect,subscribe,disconnect)등의 요청시에는 http header등 http 메서지를 넣어올수있고, 이를 interceptor를 통해 가로채 토큰등을 검증할수있음.
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
     }
 }
