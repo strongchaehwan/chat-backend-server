@@ -32,7 +32,7 @@ public class SecurityConfigs {
                 .httpBasic(AbstractHttpConfigurer::disable) // HTTP Basic 비활성화 (잘안씀) -> 토큰 기반으로 할것이기떄문
                 // 특정 url 패턴에 대해서는 Authentication 객체 요구되지않음.(인증처리 제외)
                 .authorizeHttpRequests(a ->
-                        a.requestMatchers("/api/member/create", "/api/member/doLogin","/connect").permitAll().anyRequest().authenticated())
+                        a.requestMatchers("/member/create", "/member/doLogin","/connect/**").permitAll().anyRequest().authenticated())
                 .sessionManagement(s ->
                         s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 방식을 사용 하지 않겠다.
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
