@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +33,9 @@ public class ChatMessage extends BaseTimeEntity {
 
     @Column(nullable = false, length = 500)
     private String message;
+
+    @OneToMany(mappedBy = "chatMessage" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<ReadStatus> readStatuses = new ArrayList<>(); // 메시지를 삭제할떄 그 메시지에 대한 읽음 여부도 삭제하자
 
 
 }
