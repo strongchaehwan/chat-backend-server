@@ -1,14 +1,14 @@
 package com.example.chatserver.chat.controller;
 
+import com.example.chatserver.chat.dto.ChatRoomListResponseDto;
 import com.example.chatserver.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -26,5 +26,24 @@ public class ChatController {
         System.out.println("roomName = " + roomName);
         chatService.createGroupRoom(roomName);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+
+    /**
+     * 그룹 채팅 목록 조회
+     */
+    @GetMapping("/room/group/list")
+    public ResponseEntity<?> getGroupChatRooms() {
+        List<ChatRoomListResponseDto> groupChatRooms = chatService.getGroupChatRooms(); // 그룹 채팅 목록만 조회
+        return ResponseEntity.status(HttpStatus.OK).body(groupChatRooms);
+    }
+
+    /**
+     * 그룹 채팅방 참여
+     */
+    @PostMapping("/room/group/{roomId}/join")
+    public ResponseEntity<?> joinGroupChatRoom(@PathVariable(name = "roomId") Long roomId) {
+        chatService.addParticipantToGroupChat(roomId);
+        return ResponseEntity.ok().build();
     }
 }
