@@ -2,6 +2,7 @@ package com.example.chatserver.error.advice;
 
 
 import com.example.chatserver.error.ErrorResult;
+import com.example.chatserver.error.IsPresentParticipant;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,14 @@ public class ControllerAdvice {
         ErrorResult errorResult = new ErrorResult("IllegalArgumentException", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IsPresentParticipant.class)
+    public ResponseEntity<ErrorResult> isPresentParticipant(IsPresentParticipant e) {
+        log.error("[execptionHandle] ex", e);
+        ErrorResult errorResult = new ErrorResult("IsPresentParticipant", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResult> EntityNotFoundException(EntityNotFoundException e) {

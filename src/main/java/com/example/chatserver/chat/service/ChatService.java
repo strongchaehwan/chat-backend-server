@@ -10,6 +10,7 @@ import com.example.chatserver.chat.repository.ChatMessageRepository;
 import com.example.chatserver.chat.repository.ChatParticipantRepository;
 import com.example.chatserver.chat.repository.ChatRoomRepository;
 import com.example.chatserver.chat.repository.ReadStatusRepository;
+import com.example.chatserver.error.IsPresentParticipant;
 import com.example.chatserver.member.domain.Member;
 import com.example.chatserver.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -115,6 +116,8 @@ public class ChatService {
         Optional<ChatParticipant> optionalChatParticipant = chatParticipantRepository.findByChatRoomAndMember(chatRoom, joinMember);
         if (!optionalChatParticipant.isPresent()) { // 채팅방에 참여하지 않는 사람이라면
             this.addParticipantToRoom(chatRoom, joinMember);
+        }else {
+            throw new IsPresentParticipant("이미 이 채팅방에 참여중입니다");
         }
     }
 
