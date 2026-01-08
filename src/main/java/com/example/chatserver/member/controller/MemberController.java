@@ -5,6 +5,7 @@ import com.example.chatserver.common.auth.JwtTokenProvider;
 import com.example.chatserver.member.domain.Member;
 import com.example.chatserver.member.dto.MemberListResDto;
 import com.example.chatserver.member.dto.MemberLoginReqDto;
+import com.example.chatserver.member.dto.MemberLoginResDto;
 import com.example.chatserver.member.dto.MemberSaveReqDto;
 import com.example.chatserver.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,14 +32,12 @@ public class MemberController {
 
     @PostMapping("/doLogin")
     public ResponseEntity<?> doLogin(@RequestBody MemberLoginReqDto memberLoginReqDto) {
-        // email , password rjawmd
+        // email , password 검증
         Member member = memberService.login(memberLoginReqDto);
         // 일치 할 경우 access 토큰 발행
         String jwtToken = jwtTokenProvider.createToken(member.getEmail(), member.getRole().toString());
-        Map<String, Object> loginInfo = new HashMap<>(); // Objcet 객체 반환 위험
-        loginInfo.put("id", member.getId());
-        loginInfo.put("token", jwtToken);
-        return new ResponseEntity<>(loginInfo, HttpStatus.OK);
+        MemberLoginResDto response = new MemberLoginResDto(member.getId(), jwtToken);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
